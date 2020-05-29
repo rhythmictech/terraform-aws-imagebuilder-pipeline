@@ -45,7 +45,9 @@ Resources:
       Logging:
         S3Logs:
           S3BucketName: ${log_bucket}
+          %{~ if log_prefix != null ~}
           S3KeyPrefix: ${log_prefix}
+          %{~ endif ~}
       %{~ endif ~}
       %{~ if security_groups != null ~}
       SecurityGroupIds:
