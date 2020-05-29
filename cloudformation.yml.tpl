@@ -14,11 +14,11 @@ Resources:
             %{~ endif ~}
             AmiTags:
               ${ indent(14, chomp(yamlencode(tags))) }
+            %{~ if shared_accounts != null ~}
             LaunchPermissionConfiguration:
-              %{~ if shared_accounts != null ~}
               UserIds:
                 ${ indent(14, chomp(yamlencode(shared_accounts))) }
-              %{~ endif ~}
+            %{~ endif ~}
           %{~ if license_config_arns != null ~}
           LicenseConfigurationArns:
             ${ indent(12, chomp(yamlencode(license_config_arns)))}
