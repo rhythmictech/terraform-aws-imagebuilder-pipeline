@@ -25,7 +25,7 @@ resource "aws_iam_role" "this" {
   name_prefix        = "${var.name}-imagebuilder-role-"
 
   tags = merge(
-    local.tags,
+    var.tags,
     {
       Name : "${var.name}-imagebuilder-role"
     }
