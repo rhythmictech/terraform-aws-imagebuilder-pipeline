@@ -51,7 +51,7 @@ resource "aws_cloudformation_stack" "this" {
 
   template_body = templatefile("${path.module}/cloudformation.yml.tpl", {
     description          = var.description
-    instance_profile     = aws_iam_instance_profile.this.arn
+    instance_profile     = aws_iam_instance_profile.this.name
     instance_types       = var.instance_types
     key_pair             = var.key_pair
     license_config_arns  = var.license_config_arns
