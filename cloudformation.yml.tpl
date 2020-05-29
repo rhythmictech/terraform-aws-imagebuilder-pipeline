@@ -23,7 +23,7 @@ Resources:
           LicenseConfigurationArns:
             ${ indent(12, chomp(yamlencode(license_config_arns)))}
           %{~ endif ~}
-          Region: test
+          Region: us-east-1
       Tags:
         ${ indent(8, chomp(yamlencode(tags))) }
   infraConfig:
