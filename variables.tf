@@ -31,13 +31,13 @@ variable "license_config_arns" {
 variable "log_bucket" {
   default     = null
   description = "Bucket to store logs in. If this is ommited logs will not be stored"
-  type        = "string"
+  type        = string
 }
 
 variable "log_prefix" {
   default     = null
   description = "S3 prefix to store logs at. Recommended if sharing bucket with other pipelines"
-  type        = "string"
+  type        = string
 }
 
 variable "name" {
