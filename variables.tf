@@ -80,7 +80,7 @@ variable "security_groups" {
 
 variable "shared_accounts" {
   default     = null
-  description = "AWS accounts to share AMIs with"
+  description = "AWS accounts to share AMIs with. If this is left null AMIs will be public"
   type        = list(string)
 }
 
