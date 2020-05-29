@@ -50,6 +50,16 @@ variable "recipe_arn" {
   type        = string
 }
 
+variable "regions" {
+  default = [
+    "us-east-1",
+    "us-east-2",
+    "us-west-1",
+    "us-west-2",
+    "ca-central"
+  ]
+}
+
 variable "schedule" {
   default = {
     PipelineExecutionStartCondition = "EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE"

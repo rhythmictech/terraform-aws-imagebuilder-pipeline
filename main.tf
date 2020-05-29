@@ -59,6 +59,7 @@ resource "aws_cloudformation_stack" "this" {
     log_prefix           = var.log_prefix
     name                 = var.name
     recipe_arn           = var.recipe_arn
+    regions              = var.regions
     schedule             = var.schedule
     security_groups      = var.security_groups
     shared_accounts      = var.shared_accounts
@@ -92,6 +93,7 @@ resource "aws_cloudformation_stack" "this" {
 #     log_prefix           = var.log_prefix
 #     name                 = var.name
 #     recipe_arn           = var.recipe_arn
+#     regions              = var.regions
 #     schedule             = var.schedule
 #     security_groups      = var.security_groups
 #     shared_accounts      = var.shared_accounts

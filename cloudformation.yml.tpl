@@ -7,6 +7,7 @@ Resources:
       Description: ${description}
       %{~ endif ~}
       Distributions:
+        %{~ for region in regions ~}
         - AmiDistributionConfiguration:
             Name: '${name} - AmiCopyConfiguration - {{ imagebuilder:buildDate }}'
             %{~ if description != null ~}
@@ -23,7 +24,8 @@ Resources:
           LicenseConfigurationArns:
             ${ indent(12, chomp(yamlencode(license_config_arns)))}
           %{~ endif ~}
-          Region: us-east-1
+          Region: ${region}
+        %{~ endfor ~}
       Tags:
         ${ indent(8, chomp(yamlencode(tags))) }
   infraConfig:
