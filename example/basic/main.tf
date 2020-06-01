@@ -34,7 +34,7 @@ module "test_component" {
 }
 
 module "test_recipe" {
-  source = "git::https://github.com/rhythmictech/terraform-aws-imagebuilder-recipe.git?ref=init"
+  source = "git::https://github.com/rhythmictech/terraform-aws-imagebuilder-recipe.git?ref=v0.1.0"
 
   description    = "Testing recipe"
   name           = "test-recipe"
