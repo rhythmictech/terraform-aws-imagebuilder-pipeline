@@ -23,7 +23,7 @@ module "tags" {
 }
 
 module "test_component" {
-  source = "git::https://github.com/rhythmictech/terraform-aws-imagebuilder-component-ansible.git?ref=init"
+  source = "git::https://github.com/rhythmictech/terraform-aws-imagebuilder-component-ansible.git?ref=v0.1.0"
 
   component_version = "1.0.0"
   description       = "Testing component"
