@@ -22,7 +22,7 @@ module "tags" {
   }, var.additional_tags)
 }
 
-module "test-component" {
+module "test_component" {
   source = "git::https://github.com/rhythmictech/terraform-aws-imagebuilder-component-ansible.git?ref=init"
 
   component_version = "1.0.0"
@@ -33,7 +33,7 @@ module "test-component" {
   tags              = local.tags
 }
 
-module "test-recipe" {
+module "test_recipe" {
   source = "git::https://github.com/rhythmictech/terraform-aws-imagebuilder-recipe.git?ref=init"
 
   description    = "Testing recipe"
@@ -43,18 +43,18 @@ module "test-recipe" {
   tags           = local.tags
   update         = true
 
-  components = [
-    module.test-component.component_arn,
+  component_arns = [
+    module.test_component.component_arn,
     "arn:aws:imagebuilder:us-east-1:aws:component/simple-boot-test-linux/1.0.0/1",
     "arn:aws:imagebuilder:us-east-1:aws:component/reboot-test-linux/1.0.0/1"
   ]
 }
 
-module "test-pipeline" {
-  source = "git::https://github.com/rhythmictech/terraform-aws-imagebuilder-pipeline.git?ref=init"
+module "test_pipeline" {
+  source = "../../"
 
   description = "Testing pipeline"
   name        = "test-pipeline"
   tags        = local.tags
-  recipe_arn  = module.test-recipe.recipe_arn
+  recipe_arn  = module.test_recipe.recipe_arn
 }

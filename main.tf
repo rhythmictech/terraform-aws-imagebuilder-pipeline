@@ -35,8 +35,8 @@ resource "aws_iam_role" "this" {
 resource "aws_iam_role_policy_attachment" "this" {
   count = length(local.iam_policies)
 
-  role       = aws_iam_role.this.name
   policy_arn = local.iam_policies[count.index]
+  role       = aws_iam_role.this.name
 }
 
 resource "aws_iam_instance_profile" "this" {
@@ -47,7 +47,12 @@ resource "aws_iam_instance_profile" "this" {
 resource "aws_cloudformation_stack" "this" {
   name               = var.name
   on_failure         = "ROLLBACK"
-  timeout_in_minutes = var.timeout
+  timeout_in_minutes = var.cloudformation_timeout
+
+  tags = merge(
+    var.tags,
+    { Name : "${var.name}-stack" }
+  )
 
   template_body = templatefile("${path.module}/cloudformation.yml.tpl", {
     description          = var.description
@@ -61,10 +66,10 @@ resource "aws_cloudformation_stack" "this" {
     recipe_arn           = var.recipe_arn
     regions              = var.regions
     schedule             = var.schedule
-    security_groups      = var.security_groups
-    shared_accounts      = var.shared_accounts
-    sns_topic            = var.sns_topic
-    status               = var.status
+    security_group_ids   = var.security_group_ids
+    shared_account_ids   = var.shared_account_ids
+    sns_topic_arn        = var.sns_topic_arn
+    status               = var.enabled ? "ENABLED" : "DISABLED"
     subnet               = var.subnet
     terminate_on_failure = var.terminate_on_failure
     test_config          = var.test_config
@@ -74,9 +79,4 @@ resource "aws_cloudformation_stack" "this" {
       { Name : var.name }
     )
   })
-
-  tags = merge(
-    var.tags,
-    { Name : "${var.name}-stack" }
-  )
 }

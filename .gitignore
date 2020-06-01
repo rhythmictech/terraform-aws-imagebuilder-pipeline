@@ -7,7 +7,7 @@
 
 # .tfvars files
 *.tfvars
-!example/*.tfvars
+!example/**/*.tfvars
 
 # pem files
 *.pem

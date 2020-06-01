@@ -4,10 +4,22 @@ variable "additional_iam_policy_arns" {
   type        = list(string)
 }
 
+variable "cloudformation_timeout" {
+  default     = 10
+  description = "How long to wait (in minutes) for CFN to apply before giving up"
+  type        = number
+}
+
 variable "description" {
   default     = null
   description = "description of component"
   type        = string
+}
+
+variable "enabled" {
+  default     = true
+  description = "Whether pipeline is ENABLED or DISABLED"
+  type        = bool
 }
 
 variable "instance_types" {
@@ -72,28 +84,21 @@ variable "schedule" {
   })
 }
 
-variable "security_groups" {
+variable "security_group_ids" {
   default     = null
-  description = "Security groups for the Image Builder"
+  description = "Security group IDs for the Image Builder"
   type        = list(string)
 }
 
-variable "shared_accounts" {
+variable "shared_account_ids" {
   default     = null
   description = "AWS accounts to share AMIs with. If this is left null AMIs will be public"
   type        = list(string)
 }
 
-variable "sns_topic" {
+variable "sns_topic_arn" {
   default     = null
   description = "SNS topic to notify when new images are created"
-  type        = string
-}
-
-# TODO: Add validation
-variable "status" {
-  default     = "ENABLED"
-  description = "Whether pipeline is ENABLED or DISABLED"
   type        = string
 }
 
@@ -125,10 +130,4 @@ variable "test_config" {
     ImageTestsEnabled = bool
     TimeoutMinutes    = number
   })
-}
-
-variable "timeout" {
-  default     = 10
-  description = "How long to wait (in minutes) for CFN to apply before giving up"
-  type        = number
 }

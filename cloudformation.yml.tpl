@@ -15,10 +15,10 @@ Resources:
             %{~ endif ~}
             AmiTags:
               ${ indent(14, chomp(yamlencode(tags))) }
-            %{~ if shared_accounts != null ~}
+            %{~ if shared_account_ids != null ~}
             LaunchPermissionConfiguration:
               UserIds:
-                ${ indent(14, chomp(yamlencode(shared_accounts))) }
+                ${ indent(14, chomp(yamlencode(shared_account_ids))) }
             %{~ endif ~}
           %{~ if license_config_arns != null ~}
           LicenseConfigurationArns:
@@ -51,12 +51,12 @@ Resources:
           S3KeyPrefix: ${log_prefix}
           %{~ endif ~}
       %{~ endif ~}
-      %{~ if security_groups != null ~}
+      %{~ if security_group_ids != null ~}
       SecurityGroupIds:
-        ${ indent(8, chomp(yamlencode(security_groups))) }
+        ${ indent(8, chomp(yamlencode(security_group_ids))) }
       %{~ endif ~}
-      %{~ if sns_topic != null ~}
-      SnsTopicArn: ${sns_topic}
+      %{~ if sns_topic_arn != null ~}
+      SnsTopicArn: ${sns_topic_arn}
       %{~ endif ~}
       %{~ if subnet != null ~}
       SubnetId: ${subnet}
