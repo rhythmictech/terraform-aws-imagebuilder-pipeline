@@ -23,7 +23,8 @@ module "tags" {
 }
 
 module "test_component" {
-  source = "git::https://github.com/rhythmictech/terraform-aws-imagebuilder-component-ansible.git?ref=v0.1.0"
+  source  = "rhythmictech/imagebuilder-component-ansible/aws"
+  version = "~> 0.1.0"
 
   component_version = "1.0.0"
   description       = "Testing component"
@@ -34,7 +35,8 @@ module "test_component" {
 }
 
 module "test_recipe" {
-  source = "git::https://github.com/rhythmictech/terraform-aws-imagebuilder-recipe.git?ref=v0.1.0"
+  source  = "rhythmictech/imagebuilder-recipe/aws"
+  version = "~> 0.1.0"
 
   description    = "Testing recipe"
   name           = "test-recipe"
@@ -51,7 +53,8 @@ module "test_recipe" {
 }
 
 module "test_pipeline" {
-  source = "../../"
+  source  = "rhythmictech/imagebuilder-pipeline/aws"
+  version = "~> 0.1.0"
 
   description = "Testing pipeline"
   name        = "test-pipeline"
