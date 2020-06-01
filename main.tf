@@ -1,10 +1,36 @@
 locals {
+  log_prefix_computed = (
+    var.log_prefix != null
+    ? replace("/${var.log_prefix}/*", "//{2,}/", "/")
+    : "/*"
+  )
+}
+
+data "aws_iam_policy_document" "log_write" {
+  count = var.log_bucket != null ? 1 : 0
+
+  statement {
+    actions   = ["s3:PutObject"]
+    resources = ["arn:aws:s3:::${var.log_bucket}${local.log_prefix_computed}"]
+  }
+}
+
+resource "aws_iam_policy" "log_write" {
+  count = var.log_bucket != null ? 1 : 0
+
+  description = "IAM policy granting write access to the logging bucket for ${var.name}"
+  name_prefix = "${var.name}-logging-policy-"
+  policy      = data.aws_iam_policy_document.log_write[count.index].json
+}
+
+locals {
+  core_iam_policies = [
+    "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
+    "arn:aws:iam::aws:policy/EC2InstanceProfileForImageBuilder"
+  ]
   iam_policies = concat(
-    [
-      "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
-      "arn:aws:iam::312594956781:policy/ec2-image-builder-logging",
-      "arn:aws:iam::aws:policy/EC2InstanceProfileForImageBuilder",
-    ],
+    local.core_iam_policies,
+    aws_iam_policy.log_write[*].arn,
     var.additional_iam_policy_arns
   )
 }
@@ -33,7 +59,11 @@ resource "aws_iam_role" "this" {
 }
 
 resource "aws_iam_role_policy_attachment" "this" {
-  count = length(local.iam_policies)
+  count = (
+    var.log_bucket == null
+    ? length(local.core_iam_policies) + length(var.additional_iam_policy_arns)
+    : length(local.core_iam_policies) + length(var.additional_iam_policy_arns) + 1
+  )
 
   policy_arn = local.iam_policies[count.index]
   role       = aws_iam_role.this.name
