@@ -57,6 +57,12 @@ variable "name" {
   type        = string
 }
 
+variable "public" {
+  default     = false
+  description = "Whether resulting AMI should be public"
+  type        = bool
+}
+
 variable "recipe_arn" {
   description = "ARN of the recipe to use. Must change with Recipe version"
   type        = string
@@ -91,7 +97,7 @@ variable "security_group_ids" {
 }
 
 variable "shared_account_ids" {
-  default     = null
+  default     = []
   description = "AWS accounts to share AMIs with. If this is left null AMIs will be public"
   type        = list(string)
 }
