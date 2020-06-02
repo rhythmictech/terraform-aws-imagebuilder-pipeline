@@ -9,17 +9,20 @@ Resources:
       Distributions:
         %{~ for region in regions ~}
         - AmiDistributionConfiguration:
-            Name: '${name} - AmiCopyConfiguration - {{ imagebuilder:buildDate }}'
+            Name: '${name} - ${region} - AmiCopyConfiguration - {{ imagebuilder:buildDate }}'
             %{~ if description != null ~}
             Description: ${description}
             %{~ endif ~}
             AmiTags:
               ${ indent(14, chomp(yamlencode(tags))) }
-            %{~ if shared_account_ids != null ~}
             LaunchPermissionConfiguration:
+              %{~ if public == false ~}
               UserIds:
-                ${ indent(14, chomp(yamlencode(shared_account_ids))) }
-            %{~ endif ~}
+                ${ indent(16, chomp(yamlencode(shared_account_ids))) }
+              %{~ else ~}
+              UserGroups:
+                - all
+              %{~ endif ~}
           %{~ if license_config_arns != null ~}
           LicenseConfigurationArns:
             ${ indent(12, chomp(yamlencode(license_config_arns)))}

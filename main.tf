@@ -93,6 +93,7 @@ resource "aws_cloudformation_stack" "this" {
     log_bucket           = var.log_bucket
     log_prefix           = var.log_prefix
     name                 = var.name
+    public               = var.public
     recipe_arn           = var.recipe_arn
     regions              = var.regions
     schedule             = var.schedule
