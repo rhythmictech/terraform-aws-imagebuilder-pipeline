@@ -1,0 +1,43 @@
+repos:
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.31.0
+    hooks:
+      - id: terraform_docs
+        args:
+          - --args=--sort-by-required
+      - id: terraform_fmt
+      - id: terraform_tflint
+        alias: terraform_tflint_deep
+        name: terraform_tflint_deep
+        args:
+          - --args=--deep
+      - id: terraform_tflint
+        alias: terraform_tflint_nocreds
+        name: terraform_tflint_nocreds
+      - id: terraform_tfsec
+      - id: terraform_validate
+        exclude: examples
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.0.0
+    hooks:
+      - id: check-case-conflict
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-symlinks
+      - id: check-yaml
+        args:
+          - --unsafe
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: mixed-line-ending
+        args:
+          - --fix=lf
+      - id: no-commit-to-branch
+      - id: pretty-format-json
+        args:
+          - --autofix
+          - --top-keys=name,Name
+      - id: trailing-whitespace
+        args:
+          - --markdown-linebreak-ext=md
+        exclude: README.md
