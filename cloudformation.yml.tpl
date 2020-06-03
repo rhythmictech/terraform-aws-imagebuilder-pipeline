@@ -33,7 +33,7 @@ Resources:
         ${ indent(8, chomp(yamlencode(tags))) }
   infraConfig:
     Type: AWS::ImageBuilder::InfrastructureConfiguration
-    Properties: 
+    Properties:
       Name: ${name}-infrastructure-configuration
       %{~ if description != null ~}
       Description: ${description}
