@@ -76,6 +76,8 @@ variable "regions" {
     "us-west-2",
     "ca-central-1"
   ]
+  description = "Regions that AMIs will be available in"
+  type        = list(string)
 }
 
 variable "schedule" {

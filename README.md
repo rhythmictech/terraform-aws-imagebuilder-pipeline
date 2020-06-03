@@ -49,7 +49,7 @@ Allows the creation of EC2 Image Builder Pipelines with Cloudformation until nat
 | log\_bucket | Bucket to store logs in. If this is ommited logs will not be stored | `string` | `null` | no |
 | log\_prefix | S3 prefix to store logs at. Recommended if sharing bucket with other pipelines | `string` | `null` | no |
 | public | Whether resulting AMI should be public | `bool` | `false` | no |
-| regions | n/a | `list` | <pre>[<br>  "us-east-1",<br>  "us-east-2",<br>  "us-west-1",<br>  "us-west-2",<br>  "ca-central-1"<br>]</pre> | no |
+| regions | Regions that AMIs will be available in | `list(string)` | <pre>[<br>  "us-east-1",<br>  "us-east-2",<br>  "us-west-1",<br>  "us-west-2",<br>  "ca-central-1"<br>]</pre> | no |
 | schedule | Schedule expression for when pipeline should run automatically https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-imagepipeline-schedule.html | <pre>object({<br>    PipelineExecutionStartCondition = string<br>    ScheduleExpression              = string<br>  })</pre> | <pre>{<br>  "PipelineExecutionStartCondition": "EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE",<br>  "ScheduleExpression": "cron(0 0 * * mon)"<br>}</pre> | no |
 | security\_group\_ids | Security group IDs for the Image Builder | `list(string)` | `null` | no |
 | shared\_account\_ids | AWS accounts to share AMIs with. If this is left null AMIs will be public | `list(string)` | `[]` | no |
@@ -63,7 +63,7 @@ Allows the creation of EC2 Image Builder Pipelines with Cloudformation until nat
 
 | Name | Description |
 |------|-------------|
-| pipeline\_arn | n/a |
+| pipeline\_arn | ARN of EC2 Image Builder Pipeline |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
