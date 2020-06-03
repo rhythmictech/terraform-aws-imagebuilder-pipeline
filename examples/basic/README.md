@@ -4,8 +4,8 @@ A basic example for this repository
 ## Code
 ```hcl
 module "test_pipeline" {
-  source  = "rhythmictech/imagebuilder-recipe/aws"
-  version = "~> 0.2.0"
+  source  = "rhythmictech/imagebuilder-pipeline/aws"
+  version = "~> 0.3.0"
 
   description = "Testing pipeline"
   name        = "test-pipeline"
