@@ -53,11 +53,11 @@ module "test_recipe" {
 }
 
 module "test_pipeline" {
-  source  = "rhythmictech/imagebuilder-pipeline/aws"
-  version = "~> 0.1.0"
+  source = "../../"
 
   description = "Testing pipeline"
   name        = "test-pipeline"
   tags        = local.tags
   recipe_arn  = module.test_recipe.recipe_arn
+  public      = false
 }
