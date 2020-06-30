@@ -9,7 +9,7 @@ Resources:
       Distributions:
         %{~ for region in regions ~}
         - AmiDistributionConfiguration:
-            Name: '${name} - ${region} - AmiCopyConfiguration - {{ imagebuilder:buildDate }}'
+            Name: '${image_name}-{{ imagebuilder:buildDate }}'
             %{~ if description != null ~}
             Description: ${description}
             %{~ endif ~}

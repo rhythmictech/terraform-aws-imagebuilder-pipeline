@@ -1,4 +1,9 @@
 locals {
+  image_name = coalesce(
+    var.image_name,
+    var.name
+  )
+
   log_prefix_computed = (
     var.log_prefix != null
     ? replace("/${var.log_prefix}/*", "//{2,}/", "/")
@@ -85,14 +90,15 @@ resource "aws_cloudformation_stack" "this" {
   )
 
   template_body = templatefile("${path.module}/cloudformation.yml.tpl", {
+    name                 = var.name
     description          = var.description
+    image_name           = local.image_name
     instance_profile     = aws_iam_instance_profile.this.name
     instance_types       = var.instance_types
     key_pair             = var.key_pair
     license_config_arns  = var.license_config_arns
     log_bucket           = var.log_bucket
     log_prefix           = var.log_prefix
-    name                 = var.name
     public               = var.public
     recipe_arn           = var.recipe_arn
     regions              = var.regions
