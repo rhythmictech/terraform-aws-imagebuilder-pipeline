@@ -22,6 +22,12 @@ variable "enabled" {
   type        = bool
 }
 
+variable "image_name" {
+  default     = ""
+  description = "The name prefix given to the AMI created by the pipeline (a timestamp will be added to the end)"
+  type        = string
+}
+
 variable "instance_types" {
   default     = ["t3.medium"]
   description = "Instance types to create images from. It's unclear why this is a list. Possibly because different types can result in different images (like ARM instances)"
