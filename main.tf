@@ -1,4 +1,6 @@
 locals {
+  has_ssh_key = var.ssh_key_secret_arn != null || var.ssh_key_secret_name != null
+
   image_name = coalesce(
     var.image_name,
     var.name
@@ -23,9 +25,38 @@ data "aws_iam_policy_document" "log_write" {
 resource "aws_iam_policy" "log_write" {
   count = var.log_bucket != null ? 1 : 0
 
-  description = "IAM policy granting write access to the logging bucket for ${var.name}"
   name_prefix = "${var.name}-logging-policy-"
-  policy      = data.aws_iam_policy_document.log_write[count.index].json
+  description = "IAM policy granting write access to the logging bucket for ${var.name}"
+  policy      = data.aws_iam_policy_document.log_write[0].json
+}
+
+data "aws_secretsmanager_secret" "ssh_key" {
+  count = local.has_ssh_key ? 1 : 0
+
+  arn  = var.ssh_key_secret_arn
+  name = var.ssh_key_secret_name
+}
+
+data "aws_iam_policy_document" "secret_read" {
+  count = local.has_ssh_key ? 1 : 0
+
+  statement {
+    resources = [data.aws_secretsmanager_secret.ssh_key[0].arn]
+
+    actions = [
+      "secretsmanager:GetSecretValue",
+      "secretsmanager:DescribeSecret",
+      "secretsmanager:ListSecretVersionIds"
+    ]
+  }
+}
+
+resource "aws_iam_policy" "secret_read" {
+  count = local.has_ssh_key ? 1 : 0
+
+  name_prefix = "${var.name}-secret-read-policy-"
+  description = "IAM policy granting read access to the ssh key secret at ${data.aws_secretsmanager_secret.ssh_key[0].name}"
+  policy      = data.aws_iam_policy_document.secret_read[0].json
 }
 
 locals {
@@ -33,11 +64,6 @@ locals {
     "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
     "arn:aws:iam::aws:policy/EC2InstanceProfileForImageBuilder"
   ]
-  iam_policies = concat(
-    local.core_iam_policies,
-    aws_iam_policy.log_write[*].arn,
-    var.additional_iam_policy_arns
-  )
 }
 
 data "aws_iam_policy_document" "assume" {
@@ -63,14 +89,31 @@ resource "aws_iam_role" "this" {
   )
 }
 
-resource "aws_iam_role_policy_attachment" "this" {
-  count = (
-    var.log_bucket == null
-    ? length(local.core_iam_policies) + length(var.additional_iam_policy_arns)
-    : length(local.core_iam_policies) + length(var.additional_iam_policy_arns) + 1
-  )
+resource "aws_iam_role_policy_attachment" "core" {
+  count = length(local.core_iam_policies)
 
-  policy_arn = local.iam_policies[count.index]
+  policy_arn = local.core_iam_policies[count.index]
+  role       = aws_iam_role.this.name
+}
+
+resource "aws_iam_role_policy_attachment" "log_write" {
+  count = var.log_bucket != null ? 1 : 0
+
+  policy_arn = aws_iam_policy.log_write[0].arn
+  role       = aws_iam_role.this.name
+}
+
+resource "aws_iam_role_policy_attachment" "secret_read" {
+  count = local.has_ssh_key ? 1 : 0
+
+  policy_arn = aws_iam_policy.secret_read[0].arn
+  role       = aws_iam_role.this.name
+}
+
+resource "aws_iam_role_policy_attachment" "additional" {
+  count = length(var.additional_iam_policy_arns)
+
+  policy_arn = var.additional_iam_policy_arns[count.index]
   role       = aws_iam_role.this.name
 }
 

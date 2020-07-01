@@ -55,6 +55,8 @@ Allows the creation of EC2 Image Builder Pipelines with Cloudformation until nat
 | security\_group\_ids | Security group IDs for the Image Builder | `list(string)` | `null` | no |
 | shared\_account\_ids | AWS accounts to share AMIs with. If this is left null AMIs will be public | `list(string)` | `[]` | no |
 | sns\_topic\_arn | SNS topic to notify when new images are created | `string` | `null` | no |
+| ssh\_key\_secret\_arn | ARN of a secretsmanager secret containing an SSH key (use arn OR name, not both) | `string` | `null` | no |
+| ssh\_key\_secret\_name | Name of a secretsmanager secret containing an SSH key (use arn OR name, not both) | `string` | `null` | no |
 | subnet | Subnet ID to use for builder | `string` | `null` | no |
 | tags | map of tags to use for CFN stack and component | `map(string)` | `{}` | no |
 | terminate\_on\_failure | Change to false if you want to ssh into a builder for debugging after failure | `bool` | `true` | no |
@@ -65,6 +67,7 @@ Allows the creation of EC2 Image Builder Pipelines with Cloudformation until nat
 | Name | Description |
 |------|-------------|
 | pipeline\_arn | ARN of EC2 Image Builder Pipeline |
+| role\_name | The name of the IAM role for use if additional permissions are needed. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
