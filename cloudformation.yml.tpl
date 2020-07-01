@@ -30,7 +30,6 @@ Resources:
           Region: ${region}
         %{~ endfor ~}
       Tags:
-        created_date: '{{ imagebuilder:buildDate }}'
         ${ indent(8, chomp(yamlencode(tags))) }
   infraConfig:
     Type: AWS::ImageBuilder::InfrastructureConfiguration
