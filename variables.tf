@@ -116,6 +116,18 @@ variable "sns_topic_arn" {
   type        = string
 }
 
+variable "ssh_key_secret_arn" {
+  default     = null
+  description = "ARN of a secretsmanager secret containing an SSH key (use arn OR name, not both)"
+  type        = string
+}
+
+variable "ssh_key_secret_name" {
+  default     = null
+  description = "Name of a secretsmanager secret containing an SSH key (use arn OR name, not both)"
+  type        = string
+}
+
 variable "subnet" {
   default     = null
   description = "Subnet ID to use for builder"
