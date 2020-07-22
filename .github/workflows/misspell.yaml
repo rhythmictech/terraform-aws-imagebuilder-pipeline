@@ -1,0 +1,23 @@
+---
+name: misspell
+on:
+  push:
+    branches:
+      - main
+      - master
+      - prod
+      - develop
+
+jobs:
+  misspell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: misspell
+        uses: reviewdog/action-misspell@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          locale: "US"
+          reporter: github-check
+          filter_mode: nofilter
+          level: error

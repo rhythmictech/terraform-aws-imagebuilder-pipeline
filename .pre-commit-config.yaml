@@ -3,6 +3,7 @@ repos:
     rev: v1.31.0
     hooks:
       - id: terraform_docs
+        always_run: true
         args:
           - --args=--sort-by-required
       - id: terraform_fmt
@@ -15,7 +16,28 @@ repos:
         alias: terraform_tflint_nocreds
         name: terraform_tflint_nocreds
       - id: terraform_tfsec
+  - repo: local
+    hooks:
       - id: terraform_validate
+        name: terraform_validate
+        entry: |
+          bash -c '
+            AWS_DEFAULT_REGION=us-east-1
+            declare -a DIRS
+            for FILE in "$@"
+            do
+              DIRS+=($(dirname "$FILE"))
+            done
+            for DIR in $(printf "%s\n" "${DIRS[@]}" | sort -u)
+            do
+              cd $(dirname "$FILE")
+              terraform init --backend=false
+              terraform validate .
+            done
+          '
+        language: system
+        verbose: true
+        files: \.tf(vars)?$
         exclude: examples
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v3.0.0
@@ -28,11 +50,17 @@ repos:
         args:
           - --unsafe
       - id: end-of-file-fixer
-      - id: trailing-whitespace
       - id: mixed-line-ending
         args:
           - --fix=lf
       - id: no-commit-to-branch
+        args:
+          - --branch
+          - main
+          - --branch
+          - master
+          - --branch
+          - prod
       - id: pretty-format-json
         args:
           - --autofix
