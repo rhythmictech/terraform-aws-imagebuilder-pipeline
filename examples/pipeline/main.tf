@@ -1,16 +1,16 @@
 locals {
-  parent_name = "parent_image"
+  parent_name    = "parent_image"
   parent_version = "1._0.0"
 
-  child_name = "child_image"
+  child_name    = "child_image"
   child_version = "1.0.0"
 }
 
 # Parent component
 module "parent_component" {
-  source  = "rhythmictech/imagebuilder-component-ansible/aws"
+  source = "rhythmictech/imagebuilder-component-ansible/aws"
 
-  name              = local.parent_name
+  name = local.parent_name
 
   component_version = local.parent_version
   playbook_dir      = "base"
@@ -18,9 +18,9 @@ module "parent_component" {
 }
 
 module "parent_recipe" {
-  source  = "rhythmictech/imagebuilder-recipe/aws"
+  source = "rhythmictech/imagebuilder-recipe/aws"
 
-  name           = local.parent_name
+  name = local.parent_name
 
   parent_image   = "arn:aws:imagebuilder:us-east-1:aws:image/amazon-linux-2-x86/x.x.x"
   recipe_version = local.parent_version
@@ -34,12 +34,12 @@ module "parent_recipe" {
 }
 
 module "parent_pipeline" {
-  source  = "rhythmictech/imagebuilder-pipeline/aws"
+  source = "rhythmictech/imagebuilder-pipeline/aws"
 
-  name        = local.parent_name
+  name = local.parent_name
 
-  public      = false
-  recipe_arn  = module.parent_recipe.recipe_arn
+  public     = false
+  recipe_arn = module.parent_recipe.recipe_arn
 
   # run mondays at 00:00 GMT
   schedule = {
@@ -50,9 +50,9 @@ module "parent_pipeline" {
 
 # Child component
 module "child_component" {
-  source  = "rhythmictech/imagebuilder-component-ansible/aws"
+  source = "rhythmictech/imagebuilder-component-ansible/aws"
 
-  name              = local.child_name
+  name = local.child_name
 
   component_version = local.child_version
   playbook_dir      = "app"
@@ -60,9 +60,9 @@ module "child_component" {
 }
 
 module "child_recipe" {
-  source  = "rhythmictech/imagebuilder-recipe/aws"
+  source = "rhythmictech/imagebuilder-recipe/aws"
 
-  name           = local.child_name
+  name = local.child_name
 
   parent_image   = "arn:aws:imagebuilder:us-east-1:aws:image/amazon-linux-2-x86/x.x.x"
   recipe_version = local.child_version
@@ -76,12 +76,12 @@ module "child_recipe" {
 }
 
 module "child_pipeline" {
-  source  = "rhythmictech/imagebuilder-pipeline/aws"
+  source = "rhythmictech/imagebuilder-pipeline/aws"
 
-  name        = local.child_name
+  name = local.child_name
 
-  public      = false
-  recipe_arn  = module.child_recipe.recipe_arn
+  public     = false
+  recipe_arn = module.child_recipe.recipe_arn
 
   # run mondays at 02:00 GMT
   schedule = {

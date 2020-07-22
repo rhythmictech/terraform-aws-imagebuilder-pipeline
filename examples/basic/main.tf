@@ -1,7 +1,7 @@
 module "test_component" {
-  source  = "rhythmictech/imagebuilder-component-ansible/aws"
+  source = "rhythmictech/imagebuilder-component-ansible/aws"
 
-  name              = "testing-component"
+  name = "testing-component"
 
   component_version = "1.0.0"
   description       = "Testing component"
@@ -10,9 +10,9 @@ module "test_component" {
 }
 
 module "test_recipe" {
-  source  = "rhythmictech/imagebuilder-recipe/aws"
+  source = "rhythmictech/imagebuilder-recipe/aws"
 
-  name           = "test-recipe"
+  name = "test-recipe"
 
   description    = "Testing recipe"
   parent_image   = "arn:aws:imagebuilder:us-east-1:aws:image/amazon-linux-2-x86/x.x.x"
@@ -27,16 +27,16 @@ module "test_recipe" {
 }
 
 module "test_pipeline" {
-  source  = "rhythmictech/imagebuilder-pipeline/aws"
+  source = "rhythmictech/imagebuilder-pipeline/aws"
 
-  name        = "test-pipeline"
+  name = "test-pipeline"
 
   description = "Testing pipeline"
   public      = false
   recipe_arn  = module.test_recipe.recipe_arn
-  
+
   regions = [
-    'us-east-1',
-    'us-east-2'
+    "us-east-1",
+    "us-east-2"
   ]
 }
