@@ -15,6 +15,7 @@ Resources:
             %{~ endif ~}
             AmiTags:
               ${ indent(14, chomp(yamlencode(tags))) }
+            %{~ if public == true || chomp(yamlencode(shared_account_ids)) != "[]" ~}
             LaunchPermissionConfiguration:
               %{~ if public == false ~}
               UserIds:
@@ -23,6 +24,7 @@ Resources:
               UserGroups:
                 - all
               %{~ endif ~}
+            %{~ endif ~}
           %{~ if license_config_arns != null ~}
           LicenseConfigurationArns:
             ${ indent(12, chomp(yamlencode(license_config_arns)))}
