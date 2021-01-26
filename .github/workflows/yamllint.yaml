@@ -1,0 +1,22 @@
+---
+name: yamllint
+on:
+  push:
+    branches:
+      - main
+      - master
+      - prod
+      - develop
+
+jobs:
+  yamllint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: yamllint
+        uses: reviewdog/action-yamllint@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-check
+          filter_mode: nofilter
+          level: error

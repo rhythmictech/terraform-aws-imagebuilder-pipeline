@@ -1,16 +1,22 @@
-# terraform-aws-imagebuilder-pipeline [![](https://github.com/rhythmictech/terraform-aws-imagebuilder-pipeline/workflows/pre-commit-check/badge.svg)](https://github.com/rhythmictech/terraform-aws-imagebuilder-pipeline/actions) <a href="https://twitter.com/intent/follow?screen_name=RhythmicTech"><img src="https://img.shields.io/twitter/follow/RhythmicTech?style=social&logo=RhythmicTech" alt="follow on Twitter"></a>
-Terraform module for creating EC2 Image Builder Pipelines from Cloudformation
+# terraform-aws-imagebuilder-pipeline
+[![tflint](https://github.com/rhythmictech/terraform-aws-rds-mysql/workflows/tflint/badge.svg?branch=master&event=push)](https://github.com/rhythmictech/terraform-aws-rds-mysql/actions?query=workflow%3Atflint+event%3Apush+branch%3Amaster)
+[![tfsec](https://github.com/rhythmictech/terraform-aws-rds-mysql/workflows/tfsec/badge.svg?branch=master&event=push)](https://github.com/rhythmictech/terraform-aws-rds-mysql/actions?query=workflow%3Atfsec+event%3Apush+branch%3Amaster)
+[![yamllint](https://github.com/rhythmictech/terraform-aws-rds-mysql/workflows/yamllint/badge.svg?branch=master&event=push)](https://github.com/rhythmictech/terraform-aws-rds-mysql/actions?query=workflow%3Ayamllint+event%3Apush+branch%3Amaster)
+[![misspell](https://github.com/rhythmictech/terraform-aws-rds-mysql/workflows/misspell/badge.svg?branch=master&event=push)](https://github.com/rhythmictech/terraform-aws-rds-mysql/actions?query=workflow%3Amisspell+event%3Apush+branch%3Amaster)
+[![pre-commit-check](https://github.com/rhythmictech/terraform-aws-rds-mysql/workflows/pre-commit-check/badge.svg?branch=master&event=push)](https://github.com/rhythmictech/terraform-aws-rds-mysql/actions?query=workflow%3Apre-commit-check+event%3Apush+branch%3Amaster)
+<a href="https://twitter.com/intent/follow?screen_name=RhythmicTech"><img src="https://img.shields.io/twitter/follow/RhythmicTech?style=social&logo=twitter" alt="follow on Twitter"></a>
+
+
+Terraform module for creating EC2 Image Builder Pipelines from CloudFormation
 
 ## Example
-Here's what using the module will look like
+Here's what using the module will look like. Note that this module needs at least one recipe and component to be useful. See `examples` for details.
 ```hcl
 module "test_pipeline" {
   source  = "rhythmictech/imagebuilder-pipeline/aws"
-  version = "~> 0.3.0"
 
   description = "Testing pipeline"
   name        = "test-pipeline"
-  tags        = local.tags
   recipe_arn  = module.test_recipe.recipe_arn
   public      = false
 }
@@ -19,19 +25,35 @@ module "test_pipeline" {
 ## About
 Allows the creation of EC2 Image Builder Pipelines with Cloudformation until native support is added to TF
 
+## Build Scheduling
+Builds are scheduled by a cron pattern. The pipeline takes a schedule argument as follows:
+
+```hcl
+  schedule = {
+    PipelineExecutionStartCondition = "EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE"
+    ScheduleExpression              = "cron(0 0 * * mon)"
+  }
+```
+
+The default expects an upstream AMI as a parent image and will build weekly *only if an updated image is found upstream*. By setting `PipelineExecutionStartCondition = "EXPRESSION_MATCH_ONLY"`, the build pipeline will always run.
+
+When scheduling linked jobs, it is important to be mindful of the cron schedules. If both pipelines run with `ScheduleExpression = "cron(0 0 * * mon)"`, the downstream build will always run one week late. Due to the testing phase and startup/teardown time, even a short EC2 Image Builder process can take over 15 minutes to run end to end. Complex test suites can take much longer.
+
+See Amazon's [EC2 Image Builder API Reference](https://docs.aws.amazon.com/imagebuilder/latest/APIReference/API_Schedule.html) for further details.
+
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
 
 | Name | Version |
 |------|---------|
-| terraform | >= 0.12.2 |
-| aws | ~> 2.44 |
+| terraform | >= 0.12.19 |
+| aws | >= 2.44 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws | ~> 2.44 |
+| aws | >= 2.44 |
 
 ## Inputs
 
