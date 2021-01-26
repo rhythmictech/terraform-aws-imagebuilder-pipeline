@@ -47,13 +47,13 @@ See Amazon's [EC2 Image Builder API Reference](https://docs.aws.amazon.com/image
 | Name | Version |
 |------|---------|
 | terraform | >= 0.12.19 |
-| aws | ~> 2.44 |
+| aws | >= 2.44 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws | ~> 2.44 |
+| aws | >= 2.44 |
 
 ## Inputs
 
