@@ -1,6 +1,6 @@
 output "pipeline_arn" {
   description = "ARN of EC2 Image Builder Pipeline"
-  value       = aws_cloudformation_stack.this.outputs["PipelineArn"]
+  value       = aws_imagebuilder_image_pipeline.this.arn
 }
 
 output "role_name" {
