@@ -10,9 +10,9 @@ locals {
     var.log_prefix != null
     ? replace("/${var.log_prefix}/*", "//{2,}/", "/")
     : "/*"
-  )
 
-  shared_user_groups             = var.public ? ["all"] : null
+
+  ) shared_user_groups           = var.public ? ["all"] : null
   use_custom_distribution_config = length(var.custom_distribution_configs) > 0 ? true : false
 
 }
