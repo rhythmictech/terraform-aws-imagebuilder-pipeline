@@ -13,7 +13,7 @@ locals {
   )
 
   shared_user_groups             = var.public ? ["all"] : null
-  use_custom_distribution_config = var.custom_distribution_configs != null ? true : false
+  use_custom_distribution_config = length(var.custom_distribution_configs) > 0 ? true : false
 
 }
 
@@ -211,7 +211,7 @@ resource "aws_imagebuilder_distribution_configuration" "this" {
   # Here be dragons. This is for specifying a custom set of distribution configurations as a parameter to the module.
   # If you're not using the custom_distribution_configs var you can ignore this dynamic block safely.
   dynamic "distribution" {
-    for_each = coalesce(var.custom_distribution_configs, [])
+    for_each = var.custom_distribution_configs
     content {
       region                     = lookup(distribution.value, "region", null)
       license_configuration_arns = lookup(distribution.value, "license_configuration_arns", null)
