@@ -190,7 +190,7 @@ resource "aws_imagebuilder_distribution_configuration" "this" {
   tags        = var.tags
   # We'll normally use this, a sane distribution configuration for creating AMIs
   dynamic "distribution" {
-    for_each = var.regions
+    for_each = local.use_custom_distribution_config ? [] : var.regions
     content {
       region                     = distribution.value
       license_configuration_arns = var.license_config_arns
@@ -211,7 +211,7 @@ resource "aws_imagebuilder_distribution_configuration" "this" {
   # Here be dragons. This is for specifying a custom set of distribution configurations as a parameter to the module.
   # If you're not using the custom_distribution_configs var you can ignore this dynamic block safely.
   dynamic "distribution" {
-    for_each = local.use_custom_distribution_config ? var.custom_distribution_configs : []
+    for_each = coalesce(var.custom_distribution_configs, [])
     content {
       region                     = lookup(distribution.value, "region", null)
       license_configuration_arns = lookup(distribution.value, "license_configuration_arns", null)
@@ -228,10 +228,10 @@ resource "aws_imagebuilder_distribution_configuration" "this" {
           dynamic "launch_permission" {
             for_each = length(keys(lookup(ami_distribution_configuration.value, "launch_permission", {}))) == 0 ? [] : [lookup(ami_distribution_configuration.value, "launch_permission", {})]
             content {
-              organization_arns        = lookup(launch_permission.value, organization_arns, null)
-              organizational_unit_arns = lookup(launch_permission.value, organizational_unit_arns, null)
-              user_groups              = lookup(launch_permission.value, user_groups, null)
-              user_ids                 = lookup(launch_permission.value, user_ids, null)
+              organization_arns        = lookup(launch_permission.value, "organization_arns", null)
+              organizational_unit_arns = lookup(launch_permission.value, "organizational_unit_arns", null)
+              user_groups              = lookup(launch_permission.value, "user_groups", null)
+              user_ids                 = lookup(launch_permission.value, "user_ids", null)
             }
           }
         }

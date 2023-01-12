@@ -14,7 +14,7 @@ variable "container_recipe_arn" {
 variable "custom_distribution_configs" {
   default     = null
   description = "To use your own distribution configurations for the ImageBuilder Distribution Configuration, supply a list of distribution configuration blocks as defined at https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/imagebuilder_distribution_configuration#distribution"
-  type        = list(any)
+  type        = any
 }
 
 variable "description" {
