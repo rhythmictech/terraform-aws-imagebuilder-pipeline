@@ -136,7 +136,7 @@ resource "aws_imagebuilder_image_pipeline" "this" {
   enhanced_image_metadata_enabled  = var.enhanced_image_metadata_enabled
   image_recipe_arn                 = var.image_recipe_arn
   infrastructure_configuration_arn = aws_imagebuilder_infrastructure_configuration.this.arn
-  status                           = var.enabled
+  status                           = var.enabled ? "ENABLED" : "DISABLED"
   tags                             = var.tags
 
   image_tests_configuration {
