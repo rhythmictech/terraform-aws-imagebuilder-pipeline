@@ -7,7 +7,7 @@
 <a href="https://twitter.com/intent/follow?screen_name=RhythmicTech"><img src="https://img.shields.io/twitter/follow/RhythmicTech?style=social&logo=twitter" alt="follow on Twitter"></a>
 
 
-Terraform module for creating EC2 Image Builder Pipelines from CloudFormation
+Terraform module for creating EC2 Image Builder Pipelines
 
 ## Example
 Here's what using the module will look like. Note that this module needs at least one recipe and component to be useful. See `examples` for details.
@@ -23,21 +23,20 @@ module "test_pipeline" {
 ```
 
 ## About
-Allows the creation of EC2 Image Builder Pipelines with Cloudformation until native support is added to TF
+Allows the creation of EC2 Image Builder Pipelines 
 
 ## Build Scheduling
 Builds are scheduled by a cron pattern. The pipeline takes a schedule argument as follows:
 
 ```hcl
-  schedule = {
-    PipelineExecutionStartCondition = "EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE"
-    ScheduleExpression              = "cron(0 0 * * mon)"
-  }
+  schedule_cron = "cron(0 0 * * mon)"
+  schedule_pipeline_execution_start_condition = "EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE"
+    
 ```
 
-The default expects an upstream AMI as a parent image and will build weekly *only if an updated image is found upstream*. By setting `PipelineExecutionStartCondition = "EXPRESSION_MATCH_ONLY"`, the build pipeline will always run.
+The default expects an upstream AMI as a parent image and will build weekly *only if an updated image is found upstream*. By setting `schedule_pipeline_execution_start_condition = "EXPRESSION_MATCH_ONLY"`, the build pipeline will always run.
 
-When scheduling linked jobs, it is important to be mindful of the cron schedules. If both pipelines run with `ScheduleExpression = "cron(0 0 * * mon)"`, the downstream build will always run one week late. Due to the testing phase and startup/teardown time, even a short EC2 Image Builder process can take over 15 minutes to run end to end. Complex test suites can take much longer.
+When scheduling linked jobs, it is important to be mindful of the cron schedules. If both pipelines run with `schedule_cron = "cron(0 0 * * mon)"`, the downstream build will always run one week late. Due to the testing phase and startup/teardown time, even a short EC2 Image Builder process can take over 15 minutes to run end to end. Complex test suites can take much longer.
 
 See Amazon's [EC2 Image Builder API Reference](https://docs.aws.amazon.com/imagebuilder/latest/APIReference/API_Schedule.html) for further details.
 
