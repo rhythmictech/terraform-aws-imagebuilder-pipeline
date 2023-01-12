@@ -48,7 +48,7 @@ By default this module will try to handle the aws_imagebuilder_distribution_conf
     {
       region = "us-east-1",
       ami_distribution_configuration = {
-        name = "example-build"
+        name = "example-build-{{ imagebuilder:buildDate }}"
         launch_permission = {
           user_ids = ["123456789012"]
         }
@@ -59,6 +59,9 @@ By default this module will try to handle the aws_imagebuilder_distribution_conf
     },
     {
       region = "us-west-1"
+      ami_distribution_configuration = {
+        name = "example-build-{{ imagebuilder:buildDate }}"
+      }
       ...
     }
   ]
@@ -69,14 +72,14 @@ By default this module will try to handle the aws_imagebuilder_distribution_conf
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.13 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.14 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.22.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.49.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.22.0 |
 
 ## Modules
 
@@ -108,7 +111,7 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_additional_iam_policy_arns"></a> [additional\_iam\_policy\_arns](#input\_additional\_iam\_policy\_arns) | List of ARN policies for addional builder permissions | `list(string)` | `[]` | no |
 | <a name="input_container_recipe_arn"></a> [container\_recipe\_arn](#input\_container\_recipe\_arn) | ARN of the container recipe to use. Must change with Recipe version | `string` | `null` | no |
-| <a name="input_custom_distribution_configs"></a> [custom\_distribution\_configs](#input\_custom\_distribution\_configs) | To use your own distribution configurations for the ImageBuilder Distribution Configuration, supply a list of distribution configuration blocks as defined at https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/imagebuilder_distribution_configuration#distribution | `list(any)` | `null` | no |
+| <a name="input_custom_distribution_configs"></a> [custom\_distribution\_configs](#input\_custom\_distribution\_configs) | To use your own distribution configurations for the ImageBuilder Distribution Configuration, supply a list of distribution configuration blocks as defined at https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/imagebuilder_distribution_configuration#distribution | `any` | `[]` | no |
 | <a name="input_description"></a> [description](#input\_description) | description of component | `string` | `null` | no |
 | <a name="input_enabled"></a> [enabled](#input\_enabled) | Whether pipeline is ENABLED or DISABLED | `bool` | `true` | no |
 | <a name="input_enhanced_image_metadata_enabled"></a> [enhanced\_image\_metadata\_enabled](#input\_enhanced\_image\_metadata\_enabled) | Whether additional information about the image being created is collected. Default is true. | `bool` | `true` | no |
