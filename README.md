@@ -78,7 +78,7 @@ By default this module will try to handle the aws_imagebuilder_distribution_conf
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.22.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.49.0 |
 
 ## Modules
 
