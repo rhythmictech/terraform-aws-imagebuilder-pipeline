@@ -169,7 +169,7 @@ resource "aws_imagebuilder_infrastructure_configuration" "this" {
   terminate_instance_on_failure = var.terminate_on_failure
 
   dynamic "logging" {
-    for_each = var.log_bucket != "" ? ["1"] : []
+    for_each = var.log_bucket != null ? ["1"] : []
     content {
       s3_logs {
         s3_bucket_name = var.log_bucket
