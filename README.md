@@ -40,6 +40,31 @@ When scheduling linked jobs, it is important to be mindful of the cron schedules
 
 See Amazon's [EC2 Image Builder API Reference](https://docs.aws.amazon.com/imagebuilder/latest/APIReference/API_Schedule.html) for further details.
 
+## Providing Launch Template configurations
+If you want to update launch configurations as part of the Image Build process, you can provide them with the launch_template_configurations variable. It accepts a map of regions, where each region is a list of launch template configuration maps (one per account) for that region. It will look like this:
+```hcl
+  launch_template_configurations  = {
+    "us-east-1" = [
+      {
+        launch_template_id = "lt-0f1aedef76c015126"
+        account_id         = "123456789012"
+      },
+      {
+        launch_template_id = "lt-0f1aedef86c049140"
+        account_id         = "234567890123"
+        default            = "false"
+      }
+    ]
+    "us-west-1" = [
+      {
+        launch_template_id = "lt-0f1aedef76c015113"
+        account_id         = "123456789012"
+      }
+    ]
+  }
+```
+Note that you do not have to provide a launch template configuration for every account and region you build AMIs in.  You will also need to set up IAM permissions in the destination accounts per https://docs.aws.amazon.com/imagebuilder/latest/userguide/cross-account-dist.html.  (You will need to set similar permissions via `additional_iam_policy_arns` for your own image builder pipeline if it is writing to your own account) 
+
 ## Providing your own Distribution Configuration
 By default this module will try to handle the aws_imagebuilder_distribution_configuration configuration by itself. This works for more simple builds that only need to create EC2 images, but it may not be suitable for all users. The `custom_distribution_configs` aims to handle this by allowing users to provide a list of distribution configuration blocks, based off of the terraform described at https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/imagebuilder_distribution_configuration#distribution. Where additional configuration blocks are present, they must be replaced with a map of the same name. An example of this is:
 ```hcl
@@ -78,7 +103,7 @@ By default this module will try to handle the aws_imagebuilder_distribution_conf
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.49.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.66.0 |
 
 ## Modules
 
@@ -123,6 +148,7 @@ No modules.
 | <a name="input_instance_metadata_http_tokens"></a> [instance\_metadata\_http\_tokens](#input\_instance\_metadata\_http\_tokens) | Whether a signed token is required for instance metadata retrieval requests. Valid values: required, optional. | `string` | `"optional"` | no |
 | <a name="input_instance_types"></a> [instance\_types](#input\_instance\_types) | Instance types to create images from. It's unclear why this is a list. Possibly because different types can result in different images (like ARM instances) | `list(string)` | <pre>[<br>  "t3.medium"<br>]</pre> | no |
 | <a name="input_kms_key_id"></a> [kms\_key\_id](#input\_kms\_key\_id) | KMS Key ID to use when encrypting the distributed AMI, if applicable | `string` | `null` | no |
+| <a name="input_launch_template_configurations"></a> [launch\_template\_configurations](#input\_launch\_template\_configurations) | A map of regions, where each region is a list of launch template configuration maps (one per account) for that region. Not used when custom\_distribution\_configs is in use. | `any` | `{}` | no |
 | <a name="input_license_config_arns"></a> [license\_config\_arns](#input\_license\_config\_arns) | If you're using License Manager, your ARNs go here | `set(string)` | `null` | no |
 | <a name="input_log_bucket"></a> [log\_bucket](#input\_log\_bucket) | Bucket to store logs in. If this is ommited logs will not be stored | `string` | `null` | no |
 | <a name="input_log_prefix"></a> [log\_prefix](#input\_log\_prefix) | S3 prefix to store logs at. Recommended if sharing bucket with other pipelines | `string` | `null` | no |

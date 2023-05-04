@@ -8,7 +8,6 @@ variable "container_recipe_arn" {
   default     = null
   description = "ARN of the container recipe to use. Must change with Recipe version"
   type        = string
-
 }
 
 variable "custom_distribution_configs" {
@@ -89,6 +88,12 @@ variable "kms_key_id" {
   type        = string
 }
 
+variable "launch_template_configurations" {
+  default     = {}
+  description = "A map of regions, where each region is a list of launch template configuration maps (one per account) for that region. Not used when custom_distribution_configs is in use."
+  type        = any
+}
+
 variable "license_config_arns" {
   default     = null
   description = "If you're using License Manager, your ARNs go here"
@@ -151,6 +156,7 @@ variable "schedule_pipeline_execution_start_condition" {
 variable "schedule_timezone" {
   default     = "Etc/UTC"
   description = "Timezone (in IANA timezone format) that scheduled builds, as specified by schedule_cron, run on"
+  type        = string
 }
 
 variable "security_group_ids" {

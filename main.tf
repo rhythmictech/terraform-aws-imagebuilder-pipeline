@@ -207,6 +207,15 @@ resource "aws_imagebuilder_distribution_configuration" "this" {
           user_ids                 = var.shared_account_ids
         }
       }
+
+      dynamic "launch_template_configuration" {
+        for_each = lookup(var.launch_template_configurations, distribution.value, [])
+        content {
+          default            = lookup(launch_template_configuration.value, "default", null)
+          account_id         = lookup(launch_template_configuration.value, "account_id", null)
+          launch_template_id = lookup(launch_template_configuration.value, "launch_template_id", null)
+        }
+      }
     }
   }
   # Here be dragons. This is for specifying a custom set of distribution configurations as a parameter to the module.
